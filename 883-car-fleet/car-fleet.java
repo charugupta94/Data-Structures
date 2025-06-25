@@ -13,7 +13,7 @@ class Solution {
 
         int count = 1;
         double x = t[t.length - 1];
-        for(int  i = t.length - 1; i>=0 ;i--){
+        for(int  i = t.length - 2; i>=0 ;i--){
             if(t[i] > x){
                 count++;
                 x = t[i];
