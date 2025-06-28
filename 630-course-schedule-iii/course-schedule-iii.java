@@ -18,7 +18,6 @@ class Solution {
                     pq.add(courses[i][0]);
                 }
             }
-            System.out.println(d);
         }
         return count; 
     }
