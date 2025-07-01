@@ -40,10 +40,8 @@ class Solution {
             prev = l1;
             l1 = l1.next;
         }
-        System.out.println(prev.val);
         if( carry > 0){
                 ListNode node = new ListNode(carry);
-                System.out.println(node.val);
                 prev.next = node;
             }
 
