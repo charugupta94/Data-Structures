@@ -32,7 +32,6 @@ class Solution {
         parent = new int[n];
         Pair B = farthestnode(A.node , adj, parent);
         List<Integer> path = dfs(B.node , parent , A.node);
-        System.out.println(path);
         int distance = B.dist;
         if(distance % 2 == 0){
             center.add(path.get(distance/2));
