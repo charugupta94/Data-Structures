@@ -1,20 +1,18 @@
 class Solution {
+
     public char kthCharacter(long k, int[] operations) {
         int res = 0;
-        int bitIndex = (int) (Math.log(k - 1) / Math.log(2));
-        char[] chars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-                         'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                         'u', 'v', 'w', 'x', 'y', 'z' };
-
-        while (k > 1) {
-            long pow = (long) Math.pow(2, bitIndex);
-            if (k > pow) {
-                res += operations[bitIndex];
-                k -= pow;
+        int bitIndex;
+        while (k != 1) {
+            bitIndex = 63 - Long.numberOfLeadingZeros(k);
+            if ((1L << bitIndex) == k) {
+                bitIndex--;
             }
-            bitIndex--;
+            k = k - (1L << bitIndex);
+            if (operations[bitIndex] != 0) {
+                res++;
+            }
         }
-
-        return chars[res % 26];
+        return (char) ('a' + (res % 26));
     }
 }
