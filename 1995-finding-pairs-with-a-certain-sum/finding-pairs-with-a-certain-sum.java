@@ -1,22 +1,28 @@
 class FindSumPairs {
     int[] n1, n2;
-    Map<Integer, Integer> m = new HashMap<>();
+    Map<Integer, Integer> freq;
 
     public FindSumPairs(int[] nums1, int[] nums2) {
         n1 = nums1;
         n2 = nums2;
-        for (int x : n2) m.put(x, m.getOrDefault(x, 0) + 1);
+        freq = new HashMap<>();
+        for (int num : nums2) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
     }
 
-    public void add(int i, int v) {
-        m.put(n2[i], m.get(n2[i]) - 1);
-        n2[i] += v;
-        m.put(n2[i], m.getOrDefault(n2[i], 0) + 1);
+    public void add(int index, int val) {
+        int old = n2[index];
+        freq.put(old, freq.get(old) - 1);
+        n2[index] += val;
+        freq.put(n2[index], freq.getOrDefault(n2[index], 0) + 1);
     }
 
-    public int count(int t) {
-        int c = 0;
-        for (int x : n1) c += m.getOrDefault(t - x, 0);
-        return c;
+    public int count(int tot) {
+        int res = 0;
+        for (int x : n1) {
+            res += freq.getOrDefault(tot - x, 0);
+        }
+        return res;
     }
 }
