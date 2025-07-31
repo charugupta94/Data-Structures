@@ -20,19 +20,17 @@ class Solution {
                 if(grid[i][j] == '1' && visited[i][j] != 1){
                     q.add(new Pair(i,j));
                     while(!q.isEmpty()){
-                        int size = q.size();
                         Pair p = q.poll();
                         int r = p.row;
                         int c = p.col;
                         for(int k = 0 ; k < 4; k++){
-                                int row = r + dx[k];
-                                int col = c + dy[k];
-                                if(row >= 0 && row < n && col >= 0 && col < m && grid[row][col] == '1' && visited[row][col] != 1){
-                                    q.add(new Pair(row , col));
-                                    visited[row][col] = 1;
-                                }
+                            int row = r + dx[k];
+                            int col = c + dy[k];
+                            if(row >= 0 && row < n && col >= 0 && col < m && grid[row][col] == '1' && visited[row][col] != 1){
+                                q.add(new Pair(row , col));
+                                visited[row][col] = 1;
                             }
-                        
+                        }
                     }
                     count++;
                 }
