@@ -19,6 +19,7 @@ class Solution {
             for(int j = 0; j < m ; j++){
                 if(grid[i][j] == '1' && visited[i][j] != 1){
                     q.add(new Pair(i,j));
+                    visited[i][j] = 1;
                     while(!q.isEmpty()){
                         Pair p = q.poll();
                         int r = p.row;
