@@ -18,13 +18,14 @@ class Router {
         }
 
         @Override public int hashCode() {
+        //Don’t use memory address. Instead, compute a number based on the fields that define equality.
             return Objects.hash(source, dest, timestamp);
         }
     }
 
     HashSet<Packet> hset;                  
-    Deque<Packet> dq;                              
-    HashMap<Integer, List<Integer>> destmap;        
+    Deque<Packet> dq;                               // FIFO queue
+    HashMap<Integer, List<Integer>> destmap;        // dest → sorted timestamps
     int limit;
     public Router(int memoryLimit) {
         limit = memoryLimit;
@@ -36,10 +37,12 @@ class Router {
     public boolean addPacket(int source, int dest, int timestamp) {
         Packet packet = new Packet(source, dest, timestamp);
 
+        // checking for duplicate packet
         if(hset.contains(packet)) {
             return false;
         }
 
+        // evict the oldest packet if limit is reached
         if(dq.size() == limit) {
             Packet p = dq.remove();
             hset.remove(p);
@@ -52,6 +55,7 @@ class Router {
             }
         }
 
+         // add new packet
         hset.add(packet);
         dq.offer(packet);
 
@@ -64,6 +68,7 @@ class Router {
 
     public int[] forwardPacket() {
 
+        // O(1)
         if (dq.isEmpty()) {
             return new int[0];
         }
@@ -73,7 +78,7 @@ class Router {
 
         List<Integer> timestamps = destmap.get(p.dest); 
         
-        timestamps.remove(0); 
+        timestamps.remove(0); // O(n)
         if (timestamps.isEmpty()) {
             destmap.remove(p.dest);
         }
@@ -87,8 +92,8 @@ class Router {
         }
 
         List<Integer> list = destmap.get(destination);
-        int left = lowerBound(list, startTime);         
-        int right = upperBound(list, endTime);           
+        int left = lowerBound(list, startTime);           // first ≥ startTime
+        int right = upperBound(list, endTime);            // first > endTime
         return right - left;
     }
 
@@ -120,3 +125,34 @@ class Router {
         return lo;
     }
 }
+
+/**
+ Example Explaination:
+
+ Router Memory Table (size: 3)
+
+| **Queue Order (FIFO)** | **Source** | **Destination** | **Timestamp** |
+| ---------------------- | ---------- | --------------- | ------------- |
+| 3                      | 3          | 5               | 95            |
+| 4                      | 4          | 5               | 105            |
+| 5                      | 5          | 2               | 110            |
+
+
+Data Structures:
+1. FIFO Queue Deque [p1, p2, p3, p4]
+2. HashSet - to check for duplicate packets
+3. Dest --> [list of timestamps] [MAP]
+
+add packet
+    [1,4,90]
+    [2,5,90]
+    [1,4,90] X 
+    [3,5,95] 
+    [4,5,105]
+<--forward packet-->
+add packet
+    [5,2,110]
+get count [5,100,110] = 1
+
+
+ */
